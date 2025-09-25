@@ -4,7 +4,7 @@
 -- i love Unnamed Enhancements
 
 getgenv().MOTD = {
-    ["MOTD"] = "You don’t need to be a genius from the start. \nYou only need to never stop trying."
+    ["MOTD"] = "You don’t need to be a genius \nfrom the start. \nYou only need to \n never stop trying."
 }
 
 
