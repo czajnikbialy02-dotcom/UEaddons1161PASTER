@@ -4,7 +4,7 @@
 -- i love Unnamed Enhancements
 
 getgenv().MOTD = {
-    ["MOTD"] = "Even the tallest tree \nonce started as a tiny seed."
+    ["MOTD"] = "You don’t need to be a \ngenius from the start. \nYou only need to never \nstop trying."
 }
 
 
