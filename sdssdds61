@@ -1,158 +1,31 @@
--- removed 1161 addon | we will continue making addons but private for some months
--- Why?? because someone named kkey (iemulateeac , 1405623813865078868) found a way to see every key everytime yall can say thanks to him.
--- this isnt a fuckin Unnamed Enhancements addon idiots
--- we worked so hard and all we get is getting our key system bypassed fuck this
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---// 🔊 Background Sound
-local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://80156405968805" -- background sound
-sound.Volume = 10
-sound.Looped = true
-sound.Parent = workspace
-sound:Play()
-
---// 🧊 Watermark GUI
-local Players = game:GetService("Players")
-local lp = Players.LocalPlayer
-
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "WatermarkUI"
-screenGui.ResetOnSpawn = false
-screenGui.IgnoreGuiInset = true
-screenGui.Parent = lp:WaitForChild("PlayerGui")
-
-local watermark = Instance.new("TextLabel")
-watermark.Name = "Watermark"
-watermark.Size = UDim2.new(1, 0, 1, 0) -- cover whole screen
-watermark.Position = UDim2.new(0, 0, 0, 0)
-watermark.BackgroundTransparency = 1
-watermark.Text = "Fuck you! 🔥🎉😂"
-watermark.TextColor3 = Color3.fromRGB(255, 255, 255)
-watermark.TextStrokeTransparency = 0.5
-watermark.Font = Enum.Font.Code
-watermark.TextSize = 22
-watermark.TextXAlignment = Enum.TextXAlignment.Left
-watermark.TextYAlignment = Enum.TextYAlignment.Top
-watermark.TextTransparency = 0.1
-watermark.ZIndex = 999999
-
-
-task.wait(3.5)
-game.Players.LocalPlayer:Kick("Fuck you.")
+--// ✅ Allowed HWIDs list
+local allowedHWIDs = {
+	"HWID_1234567890", -- Replace these with real HWIDs
+	"HWID_0987654321",
+	"HWID_1122334455"
+}
+
+--// 📌 Get HWID safely
+local function getHWID()
+	local success, hwid = pcall(function()
+		return game:GetService("RbxAnalyticsService"):GetClientId()
+	end)
+	return (success and hwid) or "Unknown_HWID"
+end
+
+--// 🔐 Check if HWID is allowed
+local function checkHWID()
+	local userHWID = getHWID()
+	for _, hwid in ipairs(allowedHWIDs) do
+		if userHWID == hwid then
+			return true
+		end
+	end
+	return false
+end
+
+--// 🚷 Kick if unauthorized
+if not checkHWID() then
+	game:GetService("Players").LocalPlayer:Kick("Unauthorized HWID. Access denied.")
+	return
+end
