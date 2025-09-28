@@ -70,7 +70,7 @@ function loadFly()
 
 	task.wait(1) -- initial boost
 
-	local speed = 60
+	local speed = 780
 	local control = {F = 0, B = 0, L = 0, R = 0}
 	local cam = workspace.CurrentCamera
 
