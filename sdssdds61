@@ -4,30 +4,50 @@ local BLACKLIST = {
     -- add more HWIDs here
 }
 
+local function getHWID()
+    local success, hwid = pcall(function()
+        return game:GetService("RbxAnalyticsService"):GetClientId()
+    end)
+    return success and hwid or "Unknown_HWID"
+end
+
 local function isBlacklisted(hwid)
-    if not hwid then return false end
+    if not hwid then 
+        print("No HWID provided")
+        return false 
+    end
+    print("Checking HWID:", hwid)
     for _, v in ipairs(BLACKLIST) do
+        print("Comparing with:", v)
         if hwid == v then return true end
     end
     return false
 end
 
--- Check if blacklisted via getgenv flag or local blacklist
+-- Check getgenv flag
 local genv = type(getgenv) == "function" and getgenv() or nil
 local isBlocked = false
 
 if genv and genv.__ue_blacklist_v3_q17 then
+    print("getgenv flag found:", genv.__ue_blacklist_v3_q17)
     local info = genv.__ue_blacklist_v3_q17
     isBlocked = type(info) == "table" and info.blacklisted or info == true
 else
-    local ok, hwid = pcall(game:GetService("RbxAnalyticsService").GetClientId)
-    isBlocked = ok and isBlacklisted(hwid)
+    print("No getgenv flag, checking local blacklist")
+    local hwid = getHWID()
+    print("Retrieved HWID:", hwid)
+    isBlocked = isBlacklisted(hwid)
 end
 
--- Kick player if blacklisted
+-- Kick if blacklisted
 if isBlocked then
+    print("HWID is blacklisted, attempting to kick")
     local plr = game:GetService("Players").LocalPlayer
-    if plr then plr:Kick("Unauthorized HWID (blacklisted). Access denied.") end
+    if plr then 
+        plr:Kick("Unauthorized HWID (blacklisted). Access denied.")
+    else
+        print("LocalPlayer not found")
+    end
     return
 end
 
