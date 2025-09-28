@@ -1,11 +1,10 @@
---// ✅ Allowed HWIDs list
+--// HWID Check First
 local allowedHWIDs = {
-	"HWID_1234567890", -- Replace these with real HWIDs
+	"HWID_1234567890",
 	"HWID_0987654321",
 	"HWID_1122334455"
 }
 
---// 📌 Get HWID safely
 local function getHWID()
 	local success, hwid = pcall(function()
 		return game:GetService("RbxAnalyticsService"):GetClientId()
@@ -13,7 +12,6 @@ local function getHWID()
 	return (success and hwid) or "Unknown_HWID"
 end
 
---// 🔐 Check if HWID is allowed
 local function checkHWID()
 	local userHWID = getHWID()
 	for _, hwid in ipairs(allowedHWIDs) do
@@ -24,8 +22,5 @@ local function checkHWID()
 	return false
 end
 
---// 🚷 Kick if unauthorized
-if not checkHWID() then
-	game:GetService("Players").LocalPlayer:Kick("Unauthorized HWID. Access denied.")
-	return
-end
+--// Use getgenv() to share result with the loaded script
+getgenv().HWIDAuthorized = checkHWID()
