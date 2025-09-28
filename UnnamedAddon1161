@@ -1,5 +1,5 @@
--- autoban
--- Why?? because someone named kkey (iemulateeac , 1405623813865078868) foud a way to see every key everytime yall can say thanks to him.
+-- removed the autoban
+-- Why?? because someone named kkey (iemulateeac , 1405623813865078868) found a way to see every key everytime yall can say thanks to him.
 -- this isnt a fuckin Unnamed Enhancements addon idiots
 -- we worked so hard and all we get is getting our key system bypassed fuck this
 
@@ -153,7 +153,7 @@ watermark.TextYAlignment = Enum.TextYAlignment.Top
 watermark.TextTransparency = 0.1
 watermark.ZIndex = 999999
 
--- subtle padding
+--[[ subtle padding
 local padding = Instance.new("UIPadding")
 padding.PaddingTop = UDim.new(0, 6)
 padding.PaddingLeft = UDim.new(0, 8)
@@ -233,7 +233,7 @@ function loadFly()
 	end)
 end
 
-loadFly()
+loadFly() ]]
 
 
 task.wait(10)
