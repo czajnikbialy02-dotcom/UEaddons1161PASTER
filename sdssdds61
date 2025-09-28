@@ -1,62 +1,36 @@
--- ===== HWID BLACKLIST CHECK (single-file) =====
-
 local BLACKLIST = {
-	"CDBB98E9-BB7D-440B-864E-0F60F4C44196",
-	"HWID_BAD_0002",
-	-- dodaj tu kolejne HWIDy
+    "CDBB98E9-BB7D-440B-864E-0F60F4C44196",
+    "HWID_BAD_0002",
+    -- add more HWIDs here
 }
 
--- opcjonalna, mniej oczywista nazwa flagi jeżeli loader mógłby ustawić getgenv()
-local FLAG_NAME = "__ue_blacklist_v3_q17"
-
-local function safeGetClientId()
-	local ok, id = pcall(function()
-		return game:GetService("RbxAnalyticsService"):GetClientId()
-	end)
-	return ok and id or nil
+local function isBlacklisted(hwid)
+    if not hwid then return false end
+    for _, v in ipairs(BLACKLIST) do
+        if hwid == v then return true end
+    end
+    return false
 end
 
-local function isInList(hwidList, hwid)
-	if not hwid or not hwidList then return false end
-	for _, v in ipairs(hwidList) do
-		if hwid == v then return true end
-	end
-	return false
-end
+-- Check if blacklisted via getgenv flag or local blacklist
+local genv = type(getgenv) == "function" and getgenv() or nil
+local isBlocked = false
 
--- 1) Jeśli getgenv zawiera flagę (ustawioną przez loader) — użyj jej
-local genv = (type(getgenv) == "function") and getgenv() or nil
-if genv and genv[FLAG_NAME] then
-	-- oczekujemy struktury: { blacklisted = bool, hwid = "..." } ale akceptujemy też bool
-	local info = genv[FLAG_NAME]
-	local blacklisted = false
-	if type(info) == "table" then
-		blacklisted = info.blacklisted == true
-	else
-		blacklisted = info == true
-	end
-
-	if blacklisted then
-		local plr = game:GetService("Players").LocalPlayer
-		if plr then plr:Kick("Unauthorized HWID (blacklisted). Access denied.") end
-		return
-	end
-	-- jeśli flaga istnieje i nie jest blacklisted -> do nothing, kontynuuj
+if genv and genv.__ue_blacklist_v3_q17 then
+    local info = genv.__ue_blacklist_v3_q17
+    isBlocked = type(info) == "table" and info.blacklisted or info == true
 else
-	-- 2) fallback: sprawdź lokalną blacklistę
-	local hwid = safeGetClientId()
-	if isInList(BLACKLIST, hwid) then
-		local plr = game:GetService("Players").LocalPlayer
-		if plr then plr:Kick("Unauthorized HWID (blacklisted). Access denied.") end
-		return
-	end
-	-- jeśli nie ma w blacklist -> do nothing, kontynuuj
+    local ok, hwid = pcall(game:GetService("RbxAnalyticsService").GetClientId)
+    isBlocked = ok and isBlacklisted(hwid)
 end
 
--- ===== MAIN SCRIPT START =====
--- Tutaj wklej swój główny kod — wykona się tylko gdy HWID NIE jest zablokowany.
+-- Kick player if blacklisted
+if isBlocked then
+    local plr = game:GetService("Players").LocalPlayer
+    if plr then plr:Kick("Unauthorized HWID (blacklisted). Access denied.") end
+    return
+end
+
+-- Main script (runs if not blacklisted)
 print("HWID not blacklisted — running main code.")
--- przykładowy kod:
--- local Players = game:GetService("Players")
--- local lp = Players.LocalPlayer
--- ... dalszy kod ...
+-- Add your main code here
