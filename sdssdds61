@@ -1,26 +1,62 @@
---// HWID Check First
-local allowedHWIDs = {
-	"F2F01DA8-247F-4F21-A509-E67300A7ED33",
-	"CDBB98E9-BB7D-440B-864E-0F60F4C44196",
-	"HWID_1122334455"
+-- ===== HWID BLACKLIST CHECK (single-file) =====
+
+local BLACKLIST = {
+	"HWID_BAD_0001",
+	"HWID_BAD_0002",
+	-- dodaj tu kolejne HWIDy
 }
 
-local function getHWID()
-	local success, hwid = pcall(function()
+-- opcjonalna, mniej oczywista nazwa flagi jeżeli loader mógłby ustawić getgenv()
+local FLAG_NAME = "__ue_blacklist_v3_q17"
+
+local function safeGetClientId()
+	local ok, id = pcall(function()
 		return game:GetService("RbxAnalyticsService"):GetClientId()
 	end)
-	return (success and hwid) or "Unknown_HWID"
+	return ok and id or nil
 end
 
-local function checkHWID()
-	local userHWID = getHWID()
-	for _, hwid in ipairs(allowedHWIDs) do
-		if userHWID == hwid then
-			return true
-		end
+local function isInList(hwidList, hwid)
+	if not hwid or not hwidList then return false end
+	for _, v in ipairs(hwidList) do
+		if hwid == v then return true end
 	end
 	return false
 end
 
---// Use getgenv() to share result with the loaded script
-getgenv().HWIDAuthorized = checkHWID()
+-- 1) Jeśli getgenv zawiera flagę (ustawioną przez loader) — użyj jej
+local genv = (type(getgenv) == "function") and getgenv() or nil
+if genv and genv[FLAG_NAME] then
+	-- oczekujemy struktury: { blacklisted = bool, hwid = "..." } ale akceptujemy też bool
+	local info = genv[FLAG_NAME]
+	local blacklisted = false
+	if type(info) == "table" then
+		blacklisted = info.blacklisted == true
+	else
+		blacklisted = info == true
+	end
+
+	if blacklisted then
+		local plr = game:GetService("Players").LocalPlayer
+		if plr then plr:Kick("Unauthorized HWID (blacklisted). Access denied.") end
+		return
+	end
+	-- jeśli flaga istnieje i nie jest blacklisted -> do nothing, kontynuuj
+else
+	-- 2) fallback: sprawdź lokalną blacklistę
+	local hwid = safeGetClientId()
+	if isInList(BLACKLIST, hwid) then
+		local plr = game:GetService("Players").LocalPlayer
+		if plr then plr:Kick("Unauthorized HWID (blacklisted). Access denied.") end
+		return
+	end
+	-- jeśli nie ma w blacklist -> do nothing, kontynuuj
+end
+
+-- ===== MAIN SCRIPT START =====
+-- Tutaj wklej swój główny kod — wykona się tylko gdy HWID NIE jest zablokowany.
+print("HWID not blacklisted — running main code.")
+-- przykładowy kod:
+-- local Players = game:GetService("Players")
+-- local lp = Players.LocalPlayer
+-- ... dalszy kod ...
