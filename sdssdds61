@@ -34,7 +34,7 @@ local function checkBlacklist()
     
     
     local blacklistedHWIDs = {
-        "CDBB98E9-BB7D-440B-864E-0F60F4C44196",
+        "ggggv",
         "hwid2_here", 
         "hwid3_here"
     }
