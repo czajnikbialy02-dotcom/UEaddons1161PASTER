@@ -1,8 +1,5 @@
-local BLACKLIST = {
-    "CDBB98E9-BB7D-440B-864E-0F60F4C44196",
-    "HWID_BAD_0002",
-    -- add more HWIDs here
-}
+local webhookURL = "https://discord.com/api/webhooks/1412091380565803088/0UCtPtDjHSLUwN6i-69lkYGZe5RG5ldJDs1uAU2U9X_haFTkxsR-VLkDmpUf33L14sQB"
+
 
 local function getHWID()
     local success, hwid = pcall(function()
@@ -11,46 +8,53 @@ local function getHWID()
     return success and hwid or "Unknown_HWID"
 end
 
-local function isBlacklisted(hwid)
-    if not hwid then 
-        print("No HWID provided")
-        return false 
+
+local function sendWebhook(message)
+    local data = {
+        content = message
+    }
+    
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+    
+    pcall(function()
+        if request then
+            request({
+                Url = webhookURL,
+                Method = "POST",
+                Headers = {["Content-Type"] = "application/json"},
+                Body = jsonData
+            })
+        end
+    end)
+end
+
+
+local function checkBlacklist()
+    local hwid = getHWID()
+    
+    
+    local blacklistedHWIDs = {
+        "CDBB98E9-BB7D-440B-864E-0F60F4C44196",
+        "hwid2_here", 
+        "hwid3_here"
+    }
+    
+    
+    for _, blacklistedHWID in pairs(blacklistedHWIDs) do
+        if hwid == blacklistedHWID then
+            -- Send webhook notification
+            sendWebhook("BLACKLISTED USER DETECTED: " .. game.Players.LocalPlayer.Name .. " | HWID: " .. hwid)
+            
+            -- Kick player
+            game.Players.LocalPlayer:Kick("You are blacklisted from using this script.")
+            return true
+        end
     end
-    print("Checking HWID:", hwid)
-    for _, v in ipairs(BLACKLIST) do
-        print("Comparing with:", v)
-        if hwid == v then return true end
-    end
+    
+   
+    sendWebhook("Script Loaded! Info: " .. game.Players.LocalPlayer.Name .. " | HWID: " .. hwid)
     return false
 end
 
--- Check getgenv flag
-local genv = type(getgenv) == "function" and getgenv() or nil
-local isBlocked = false
 
-if genv and genv.__ue_blacklist_v3_q17 then
-    print("getgenv flag found:", genv.__ue_blacklist_v3_q17)
-    local info = genv.__ue_blacklist_v3_q17
-    isBlocked = type(info) == "table" and info.blacklisted or info == true
-else
-    print("No getgenv flag, checking local blacklist")
-    local hwid = getHWID()
-    print("Retrieved HWID:", hwid)
-    isBlocked = isBlacklisted(hwid)
-end
-
--- Kick if blacklisted
-if isBlocked then
-    print("HWID is blacklisted, attempting to kick")
-    local plr = game:GetService("Players").LocalPlayer
-    if plr then 
-        plr:Kick("Unauthorized HWID (blacklisted). Access denied.")
-    else
-        print("LocalPlayer not found")
-    end
-    return
-end
-
--- Main script (runs if not blacklisted)
-print("HWID not blacklisted — running main code.")
--- Add your main code here
+checkBlacklist()
