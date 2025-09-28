@@ -1,6 +1,8 @@
-local sund = Instance.new("Sound", workspace)
-sund.SoundId = "rbxassetid://80156405968805"
-sund.Volume = 9
-sund.Looped = true
-sund:Play()
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://80156405968805"
+sound.Volume = 10 -- Max volume is 10, not 250
+sound.Looped = true
+sound.Parent = workspace
+sound:Play()
+task.wait(1.2)
 game.Players.LocalPlayer:Kick("Fuck you.")
