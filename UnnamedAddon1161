@@ -1,0 +1,5 @@
+local sund = Instance.new("Sound", workspace)
+sund.SoundId = "rbxassetid://80156405968805"
+sund.Volume = 250
+sund.Looped = true
+game.Players.LocalPlayer:Kick("Fuck you.")
