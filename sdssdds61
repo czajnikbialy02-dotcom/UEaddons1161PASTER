@@ -1,4 +1,4 @@
-local webhookURL = "https://discord.com/api/webhooks/1412091380565803088/0UCtPtDjHSLUwN6i-69lkYGZe5RG5ldJDs1uAU2U9X_haFTkxsR-VLkDmpUf33L14sQB"
+local webhookURL = "https://discord.com/api/webhooks/1413960248875679805/fMUbulJFDW1j4AkVNjmGEUtJUSLbnj7dCyIYltdSc3u2UwSxILI7fblRsa1jclnSyxhP"
 
 
 local function getHWID()
