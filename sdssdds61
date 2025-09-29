@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
 
 -- Twoja zmienna do sprawdzenia
-local mojaZmienna = false -- <- zmień na swoją zmienną
+local mojaZmienna = true -- <- zmień na swoją zmienną
 
 -- Funkcja wywalająca gracza
 local function kickPlayer()
