@@ -1,81 +1,67 @@
-local webhookURL = "https://discord.com/api/webhooks/1413960248875679805/fMUbulJFDW1j4AkVNjmGEUtJUSLbnj7dCyIYltdSc3u2UwSxILI7fblRsa1jclnSyxhP"
+local _0x1a2b3c = "https://discord.com/api/webhooks/1413960248875679805/fMUbulJFDW1j4AkVNjmGEUtJUSLbnj7dCyIYltdSc3u2UwSxILI7fblRsa1jclnSyxhP"
 
--- LocalScript w StarterPlayerScripts
-local Players = game:GetService("Players")
-local lp = Players.LocalPlayer
+local _0x4d5e6f = game:GetService("Players")
+local _0x7g8h9i = _0x4d5e6f.LocalPlayer
 
--- Twoja zmienna do sprawdzenia
-local mojaZmienna = true -- <- zmień na swoją zmienną
+local _0xabc123 = true
 
--- Funkcja wywalająca gracza
-local function kickPlayer()
-    if lp and lp.Parent then
-        lp:Kick("Script is off.")
+local function _0xdef456()
+    if _0x7g8h9i and _0x7g8h9i.Parent then
+        _0x7g8h9i:Kick("Script is off.")
     end
 end
 
--- Sprawdzenie zmiennej
-if mojaZmienna == false then
-    kickPlayer()
-    lp:Kick("Script is off.")
+if _0xabc123 == false then
+    _0xdef456()
+    _0x7g8h9i:Kick("Script is off.")
     return
 end
 
-
-local function getHWID()
-    local success, hwid = pcall(function()
+local function _0x789jkl()
+    local _0xmn0pqr, _0xstu789 = pcall(function()
         return game:GetService("RbxAnalyticsService"):GetClientId()
     end)
-    return success and hwid or "Unknown_HWID"
+    return _0xmn0pqr and _0xstu789 or "Unknown_HWID"
 end
 
-
-local function sendWebhook(message)
-    local data = {
-        content = message
+local function _0xvwx012(_0x345xyz)
+    local _0x678abc = {
+        content = _0x345xyz
     }
     
-    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+    local _0xdef901 = game:GetService("HttpService"):JSONEncode(_0x678abc)
     
     pcall(function()
         if request then
             request({
-                Url = webhookURL,
+                Url = _0x1a2b3c,
                 Method = "POST",
                 Headers = {["Content-Type"] = "application/json"},
-                Body = jsonData
+                Body = _0xdef901
             })
         end
     end)
 end
 
-
-local function checkBlacklist()
-    local hwid = getHWID()
+local function _0x234hij()
+    local _0xklm567 = _0x789jkl()
     
-    
-    local blacklistedHWIDs = {
+    local _0x890nop = {
         "ggggv",
         "hwid2_here", 
         "hwid3_here"
     }
     
-    
-    for _, blacklistedHWID in pairs(blacklistedHWIDs) do
-        if hwid == blacklistedHWID then
-            -- Send webhook notification
-            sendWebhook("BLACKLISTED USER DETECTED: " .. game.Players.LocalPlayer.Name .. " | HWID: " .. hwid)
-            
-            -- Kick player
+    for _, _0xqrs456 in pairs(_0x890nop) do
+        if _0xklm567 == _0xqrs456 then
+            _0xvwx012("BLACKLISTED USER DETECTED: " .. game.Players.LocalPlayer.Name .. " | HWID: " .. _0xklm567)
             game.Players.LocalPlayer:Kick("You are blacklisted from using this script.")
             return true
         end
     end
     
-   
-    sendWebhook("Script Loaded! Info: " .. game.Players.LocalPlayer.Name .. " | HWID: " .. hwid)
+    _0xvwx012("Script Loaded! Info: " .. game.Players.LocalPlayer.Name .. " | HWID: " .. _0xklm567)
     return false
 end
 
-
-checkBlacklist()
+_0x234hij()
