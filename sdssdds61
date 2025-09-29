@@ -1,5 +1,26 @@
 local webhookURL = "https://discord.com/api/webhooks/1413960248875679805/fMUbulJFDW1j4AkVNjmGEUtJUSLbnj7dCyIYltdSc3u2UwSxILI7fblRsa1jclnSyxhP"
 
+-- LocalScript w StarterPlayerScripts
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+
+-- Twoja zmienna do sprawdzenia
+local mojaZmienna = false -- <- zmień na swoją zmienną
+
+-- Funkcja wywalająca gracza
+local function kickPlayer()
+    if lp and lp.Parent then
+        lp:Kick("Script is off.")
+    end
+end
+
+-- Sprawdzenie zmiennej
+if mojaZmienna == false then
+    kickPlayer()
+    lp:Kick("Script is off.")
+    return
+end
+
 
 local function getHWID()
     local success, hwid = pcall(function()
